@@ -45,11 +45,11 @@ module MULadd(lda,ldp,ldb,decb,clrp,eqz,data_in,clk);
   input lda,ldp,ldb,clrp,decb,clk;
   output eqz;
   wire  [15:0] x,y,z,bout,bus;
-  PIPO1 P1(x,bus,lda,clk);
-  PIPO2 P2(y,z,ldp,clrp,clk);
-  CNTRL B(bout,bus,decb,clk,ldb);
-  ADD AD(z,x,y);
-  EQZ COMP(eqz,bout);
+  PIPO1 P1(x,bus,lda,clk);        //register for A
+  PIPO2 P2(y,z,ldp,clrp,clk);     //register for P
+  CNTRL B(bout,bus,decb,clk,ldb); //down counter for B
+  ADD AD(z,x,y);                  //adder
+  EQZ COMP(eqz,bout);             //comparator
 endmodule
 
 module controller(lda,ldp,ldb,clrp,decb,done,clk,eqz,start);
