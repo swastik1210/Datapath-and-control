@@ -120,3 +120,35 @@ endmodule
 
 // test bench
 
+ module tb;
+   reg [15:0]din;
+   reg clk,start;
+   wire done;
+   wire [15:0]A,M,Q,Z;
+   wire [4:0]count;
+   
+   booth B(lda,clra,sfta,ldq,clrq,sftq,ldm,clrf,addsub,ldcnt,din,qm1,clk,eqz,decr,A,M,Q,Z,count);
+   controller CTRL(lda,clra,sfta,ldq,clrq,sftq,ldm,clrf,addsub,start,decr,ldcnt,clk,q0,qm1,done,eqz);
+   
+   initial
+     begin
+       clk=1'b0;
+       #3 start=1'b1;
+       #1000 $finish;
+     end
+   
+   always #5 clk=~clk;
+   
+   initial
+     begin
+       #12 din=16'b0000000000011100;
+       #10 din=16'b0000000000100001;
+     end
+   
+   initial
+     begin
+       $dumpfile("design.vcd");
+       $dumpvars(0,tb);
+       $monitor($time, " A=%b Q=%b Q-1=%b %b ",B.A,B.Q,B.QM1.q,done);
+     end
+ endmodule
