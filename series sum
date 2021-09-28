@@ -1,5 +1,5 @@
-// It is required to design a hardware module to compute the sum of the first n terms from natural number series 1, 2, … by implementing the data path and control path separately.
-// The operation will take as input the number of terms n that is to be added and produces sum as output.For n = 4, the designed module must provide output as sum = 1 + 2 + 3 =6
+// It is required to design a hardware module to compute the sum of the first n terms from natural number series 1,2,… by implementing the data path and control path separately.
+// The operation will take as input the number of terms n that is to be added and produces sum as output.For n=3, the designed module must provide output as sum = 1 + 2 + 3 =6
 // At the beginning a registers N will be loaded with an integer value n, a counter C and a register R will be initialized to 0.
 // At each iteration, the value of counter C will be added to the value of register R, the result will be stored back in R and the counter value will be incremented by 1.
 // The process will continue as long as C < N. At the end, R will contain the result.
@@ -103,3 +103,68 @@ module controlpath(cltn,loadr,loadn,clr,incc,clk,start,stop);
       endcase
     end
 endmodule
+
+//testbench
+
+// test bench not working properly 
+// single test bench is used by ajusting the timing value to get the value
+// for in 4
+
+module tb;
+  wire stop;
+  reg [7:0]data_in;
+  reg clk,start;
+  
+  datapath DP(cltn,loadr,loadn,clr,incc,data_in,clk);
+  controlpath CP(cltn,loadr,loadn,clr,incc,clk,start,stop);
+  
+  initial
+      clk=1'b0;
+  always #5 clk=~clk;
+
+// input values to check the sum of series
+  
+  initial
+    begin
+      #10 start=1; data_in=0;
+      #10 start=1; data_in=4;
+      
+     
+      #50 $finish;
+    end
+
+
+  initial
+    begin
+      $dumpfile("design.vcd");
+      $dumpvars(0,tb);
+      $monitor( " Sum of first%d terms is%d",DP.nw,DP.rw);
+    end
+endmodule
+
+    
+// similarly for 5
+
+initial
+    begin
+      #10 start=1; data_in=0;
+      #10 start=1; data_in=5;
+      
+     
+      #60 $finish;
+    end
+    // similarly for 8
+
+initial
+    begin
+      #10 start=1; data_in=0;
+      #10 start=1; data_in=8;
+      
+     
+      #90 $finish;
+    end
+    
+    // and so on change the input values and adjust the delay accordingly to get the appropriate result
+    // I have mentioned some examples above 
+    // iF there is a better way to test multiple values at a time then please give suggestions
+    
